@@ -1,0 +1,67 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Vazirmatn", "Inter", system-ui, -apple-system, sans-serif;
+  
+  --color-brand-light: #ffffff;
+  --color-brand-blue-50: #f8fafc;
+  --color-brand-blue-100: #eff6ff;
+  --color-brand-blue-200: #e2e8f0;
+  --color-brand-blue-500: #2563eb;
+  --color-brand-blue-600: #1d4ed8;
+  --color-brand-blue-700: #1e40af;
+  --color-brand-blue-805: #1e293b;
+}
+
+/* RTL layout fixes & smooth experience */
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #fcfdfe;
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Animations and transitions */
+.fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

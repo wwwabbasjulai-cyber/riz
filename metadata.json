@@ -1,0 +1,6 @@
+{
+  "name": "Programming Team Portfolio",
+  "description": "A clean, minimalist blue and white website for a programming team, featuring portfolio showcase, team members, a fast contact form, and a secure admin panel protected by 2FA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
