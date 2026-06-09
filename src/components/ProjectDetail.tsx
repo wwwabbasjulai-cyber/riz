@@ -209,7 +209,7 @@ export default function ProjectDetail({
             </div>
 
             {/* Quick Consultation Request CTA */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-50/20 dark:from-blue-955/20 dark:to-slate-900 border border-blue-100 dark:border-blue-900/30 text-center">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-50/20 dark:from-blue-950 dark:to-slate-900 border border-blue-100 dark:border-blue-800/50 text-center">
               <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest block mb-1">طراحی پروژه مشابه</span>
               <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-3">مایلید سامانه‌ای مشابه با این ابزار برایتان خلق کنیم؟</h4>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
@@ -217,8 +217,8 @@ export default function ProjectDetail({
               </p>
               
               <button 
-                onClick={() => onOrderProposal(project.title)}
-                className="w-full py-2.5 px-4 bg-slate-950 hover:bg-slate-905 dark:bg-blue-600 dark:hover:bg-blue-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm shadow-blue-500/10 transition-colors"
+                 onClick={() => onOrderProposal(project.title)}
+                className="w-full py-2.5 px-4 bg-slate-950 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm shadow-blue-500/10 transition-colors"
               >
                 <Send className="w-3.5 h-3.5" />
                 درخواست طرح پیشنهادی
@@ -237,7 +237,7 @@ export default function ProjectDetail({
                 <div 
                   key={proj.id}
                   onClick={() => onNavigateToProject(proj.id)}
-                  className="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-slate-800 flex gap-4 hover:border-blue-100 dark:hover:border-blue-900/20 cursor-pointer group transition-all"
+                  className="p-4 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-100 dark:border-slate-700/50 flex gap-4 hover:border-blue-100 dark:hover:border-blue-700/50 cursor-pointer group transition-all"
                 >
                   <div className="w-24 h-16 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 flex-shrink-0">
                     <img 
