@@ -4,7 +4,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShieldAlert, Award, Layers, Users, PhoneCall, Code, Sun, Moon, Grid, BookOpen, Heart, HelpCircle } from 'lucide-react';
+import { Menu, X, Award, Layers, Users, PhoneCall, Code, Sun, Moon, Grid, BookOpen, Heart, HelpCircle } from 'lucide-react';
+
+
 
 interface NavbarProps {
   onOpenAdmin: () => void;
@@ -152,30 +154,7 @@ export default function Navbar({ onOpenAdmin, isAdminLoggedIn, onLogoutAdmin, is
               {isDarkMode ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
             </button>
 
-            {isAdminLoggedIn ? (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={onOpenAdmin}
-                  className="px-4 py-2 rounded-xl text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/30 text-sm font-semibold border border-blue-200 dark:border-blue-900/60 transition-all duration-200 cursor-pointer"
-                >
-                  پنل مدیریت فعال
-                </button>
-                <button
-                  onClick={onLogoutAdmin}
-                  className="px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30 text-xs font-semibold hover:border hover:border-red-200 transition-all duration-200 cursor-pointer"
-                >
-                  خروج
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={onOpenAdmin}
-                className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 text-white text-sm font-semibold tracking-wide flex items-center gap-2 shadow-sm transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-              >
-                <ShieldAlert className="w-4 h-4 text-blue-400 dark:text-blue-600" />
-                ورود به پنل
-              </button>
-            )}
+            
           </div>
 
           {/* Mobile Menu Button */}
@@ -253,32 +232,6 @@ export default function Navbar({ onOpenAdmin, isAdminLoggedIn, onLogoutAdmin, is
               ارتباط با ما
             </button>
             
-            <div className="pt-2">
-              {isAdminLoggedIn ? (
-                <div className="flex flex-col gap-2">
-                  <button
-                    onClick={() => { setIsOpen(false); onOpenAdmin(); }}
-                    className="w-full py-2.5 rounded-xl text-center bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-sm font-semibold border border-blue-100 dark:border-blue-900/60"
-                  >
-                    پنل مدیریت فعال
-                  </button>
-                  <button
-                    onClick={() => { setIsOpen(false); onLogoutAdmin(); }}
-                    className="w-full py-2 rounded-xl text-center text-red-600 dark:text-red-400 text-xs font-semibold"
-                  >
-                    خروج از حساب مدیریت
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => { setIsOpen(false); onOpenAdmin(); }}
-                  className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 text-white text-sm font-semibold flex items-center justify-center gap-2"
-                >
-                  <ShieldAlert className="w-4 h-4 text-blue-400 dark:text-blue-600" />
-                  ورود به پنل مدیریت
-                </button>
-              )}
-            </div>
           </div>
         </div>
       )}

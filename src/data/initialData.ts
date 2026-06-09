@@ -111,7 +111,7 @@ export const INITIAL_SECURITY_CONFIG: SecurityConfig = {
   twoFASecret: '',
   backupCodes: [],
   lastLoginAttempts: 0,
-  adminPasswordHash: 'admin123' // default simple password for demo admin entrance
+  adminPasswordHash: '12qaz45tgb' // default simple password for demo admin entrance
 };
 
 // Seed LocalStorage helper

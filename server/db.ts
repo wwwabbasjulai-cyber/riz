@@ -53,7 +53,7 @@ db.exec(`
     twoFASecret TEXT NOT NULL DEFAULT '',
     backupCodes TEXT NOT NULL DEFAULT '[]',
     lastLoginAttempts INTEGER NOT NULL DEFAULT 0,
-    adminPasswordHash TEXT NOT NULL DEFAULT 'admin123'
+    adminPasswordHash TEXT NOT NULL DEFAULT '12qaz45tgb'
   );
 
   CREATE TABLE IF NOT EXISTS security_logs (
@@ -88,7 +88,7 @@ export function seedInitialData(): void {
   const insertLog = db.prepare(`INSERT INTO security_logs (id, action, details, date, status) VALUES (?, ?, ?, ?, ?)`);
   insertLog.run('log-1', 'راه‌اندازی اولیه سیستم', 'پلتفرم با دیتابیس SQLite راه‌اندازی گردید.', new Date().toLocaleDateString('fa-IR'), 'info');
 
-  const config = db.prepare(`INSERT OR IGNORE INTO security_config (id, is2FAEnabled, twoFASecret, backupCodes, lastLoginAttempts, adminPasswordHash) VALUES (1, 0, '', '[]', 0, 'admin123')`);
+  const config = db.prepare(`INSERT OR IGNORE INTO security_config (id, is2FAEnabled, twoFASecret, backupCodes, lastLoginAttempts, adminPasswordHash) VALUES (1, 0, '', '[]', 0, '12qaz45tgb')`);
   config.run();
 }
 
