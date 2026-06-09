@@ -45,13 +45,13 @@ export default function ProjectDetail({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb & Navigation */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 dark:border-slate-900">
-          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-            <button onClick={onBack} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">صفحه اصلی</button>
-            <span>/</span>
-            <span className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">نمونه کارها</span>
-            <span>/</span>
-            <span className="text-slate-800 dark:text-slate-200 font-bold">{project.title}</span>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 pb-4 border-b border-slate-100 dark:border-slate-900">
+          <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+            <button onClick={onBack} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer whitespace-nowrap">صفحه اصلی</button>
+            <span className="text-slate-300 dark:text-slate-600">/</span>
+            <button onClick={onBack} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer whitespace-nowrap">نمونه کارها</button>
+            <span className="text-slate-300 dark:text-slate-600">/</span>
+            <span className="text-slate-800 dark:text-slate-200 font-bold truncate max-w-[200px] sm:max-w-[400px]">{project.title}</span>
           </div>
           
           <button 

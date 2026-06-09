@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Award, Layers, Users, PhoneCall, Code, Sun, Moon, Grid, BookOpen, Heart, HelpCircle } from 'lucide-react';
 
 
@@ -19,6 +20,8 @@ interface NavbarProps {
 export default function Navbar({ onOpenAdmin, isAdminLoggedIn, onLogoutAdmin, isDarkMode, onToggleDarkMode }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,29 +33,9 @@ export default function Navbar({ onOpenAdmin, isAdminLoggedIn, onLogoutAdmin, is
 
   const scrollToSection = (id: string) => {
     setIsOpen(false);
+    const isHome = location.pathname === '/';
     
-    const isSubPage = window.location.hash !== '' && 
-                      window.location.hash !== '#home' && 
-                      !window.location.hash.startsWith('#home');
-
-    if (isSubPage) {
-      window.location.hash = 'home';
-      // Wait for home page elements to mount securely, then scroll
-      setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          const offset = 80;
-          const bodyRect = document.body.getBoundingClientRect().top;
-          const elementRect = element.getBoundingClientRect().top;
-          const elementPosition = elementRect - bodyRect;
-          const offsetPosition = elementPosition - offset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }, 150);
-    } else {
+    if (isHome) {
       const element = document.getElementById(id);
       if (element) {
         const offset = 80;
@@ -60,11 +43,10 @@ export default function Navbar({ onOpenAdmin, isAdminLoggedIn, onLogoutAdmin, is
         const elementRect = element.getBoundingClientRect().top;
         const elementPosition = elementRect - bodyRect;
         const offsetPosition = elementPosition - offset;
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
       }
+    } else {
+      navigate(`/#${id}`);
     }
   };
 
