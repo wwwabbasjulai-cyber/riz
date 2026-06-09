@@ -11,13 +11,14 @@ import { compressImage } from '../utils/cache';
 import { api } from '../services/api';
 import { 
   Lock, Key, ShieldAlert, CheckCircle, Trash2, FileText, Plus, UserPlus, 
-  RefreshCw, Shield, AlertTriangle, Play, Calendar, Tag, Image, Clock, Eye, Sliders, LogOut, BookOpen
+  RefreshCw, Shield, AlertTriangle, Play, Calendar, Tag, Image, Clock, Eye, Sliders, LogOut, BookOpen, PenLine
 } from 'lucide-react';
 
 interface AdminPanelProps {
   onClose: () => void;
   projects: Project[];
   onAddProject: (proj: Project) => void;
+  onUpdateProject: (id: string, proj: Partial<Project>) => void;
   onDeleteProject: (id: string) => void;
   blogPosts: BlogPost[];
   onAddBlogPost: (post: BlogPost) => void;
@@ -38,6 +39,7 @@ export default function AdminPanel({
   onClose,
   projects,
   onAddProject,
+  onUpdateProject,
   onDeleteProject,
   blogPosts,
   onAddBlogPost,
@@ -72,6 +74,7 @@ export default function AdminPanel({
   const [projDemo, setProjDemo] = useState('');
   const [projGithub, setProjGithub] = useState('');
   const [projFeatured, setProjFeatured] = useState(false);
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
 
   // New Blog Post Form State
   const [blogTitle, setBlogTitle] = useState('');
@@ -175,15 +178,13 @@ export default function AdminPanel({
   };
 
   // Handle Project publishing with compression ratios integrated
-  const handlePublishProject = (e: React.FormEvent) => {
+  const handlePublishProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!projTitle || !projClient || !projDesc) return;
 
-    // Default image in case they didn't upload or choose one
     const projectImage = compressedImageBase64 || 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&auto=format&fit=crop&q=80';
 
-    const newProject: Project = {
-      id: `proj-${Date.now()}`,
+    const projectData = {
       title: projTitle,
       client: projClient,
       description: projDesc,
@@ -194,19 +195,58 @@ export default function AdminPanel({
       demoUrl: projDemo,
       githubUrl: projGithub,
       featured: projFeatured,
-      originalSize: compressionMetrics ? compressionMetrics.originalSize : '1.4 MB',
-      compressedSize: compressionMetrics ? compressionMetrics.compressedSize : '110 KB'
     };
 
-    onAddProject(newProject);
-    
-    onAddSecurityLog({
-      action: 'انتشار پروژه جدید',
-      details: `پروژه "${projTitle}" با حجم فشرده ${newProject.compressedSize} در آلبوم مستندات ثبت شد.`,
-      status: 'success'
-    });
+    if (editingProjectId) {
+      await onUpdateProject(editingProjectId, projectData);
+      onAddSecurityLog({
+        action: 'ویرایش پروژه',
+        details: `پروژه "${projTitle}" ویرایش شد.`,
+        status: 'success'
+      });
+    } else {
+      const newProject: Project = { id: `proj-${Date.now()}`, ...projectData, originalSize: compressionMetrics ? compressionMetrics.originalSize : '1.4 MB', compressedSize: compressionMetrics ? compressionMetrics.compressedSize : '110 KB' };
+      onAddProject(newProject);
+      onAddSecurityLog({
+        action: 'انتشار پروژه جدید',
+        details: `پروژه "${projTitle}" در آلبوم مستندات ثبت شد.`,
+        status: 'success'
+      });
+    }
 
-    // Reset Form
+    setEditingProjectId(null);
+    setProjTitle('');
+    setProjClient('');
+    setProjDesc('');
+    setProjLongDesc('');
+    setProjTags('');
+    setProjDate('');
+    setProjDemo('');
+    setProjGithub('');
+    setProjFeatured(false);
+    setSelectedFile(null);
+    setCompressedImageBase64('');
+    setCompressionMetrics(null);
+  };
+
+  const handleEditProject = (p: Project) => {
+    setEditingProjectId(p.id);
+    setProjTitle(p.title);
+    setProjClient(p.client);
+    setProjDesc(p.description);
+    setProjLongDesc(p.longDescription || '');
+    setProjTags(p.tags.join(', '));
+    setProjDate(p.date);
+    setProjDemo(p.demoUrl || '');
+    setProjGithub(p.githubUrl || '');
+    setProjFeatured(p.featured);
+    setCompressedImageBase64('');
+    setCompressionMetrics(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProjectId(null);
     setProjTitle('');
     setProjClient('');
     setProjDesc('');
@@ -450,9 +490,9 @@ export default function AdminPanel({
               {activeTab === 'content' && (
                 <div className="space-y-6">
                   <div>
-                    <h3 className="font-extrabold text-slate-900 dark:text-white text-xl">انتشار پروژه در پورتفولیو</h3>
+                    <h3 className="font-extrabold text-slate-900 dark:text-white text-xl">{editingProjectId ? 'ویرایش پروژه' : 'انتشار پروژه در پورتفولیو'}</h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      پروژه‌های تکمیل‌شده جدید را به سرعت همراه با فشرده‌سازی هوشمند به سایت منتقل کنید.
+                      {editingProjectId ? 'تغییرات مورد نظر را اعمال کنید.' : 'پروژه‌های تکمیل‌شده جدید را به سرعت به سایت منتقل کنید.'}
                     </p>
                   </div>
 
@@ -602,12 +642,23 @@ export default function AdminPanel({
                       <label htmlFor="featured-check" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">قرار دادن به عنوان پروژه برجسته دپارتمان</label>
                     </div>
 
-                    <button
-                      type="submit"
-                      className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
-                    >
-                      ثبت و بارگذاری پروژه در سایت
-                    </button>
+                    <div className="flex gap-3">
+                      {editingProjectId && (
+                        <button
+                          type="button"
+                          onClick={handleCancelEdit}
+                          className="w-1/3 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs transition-all cursor-pointer"
+                        >
+                          انصراف
+                        </button>
+                      )}
+                      <button
+                        type="submit"
+                        className={`${editingProjectId ? 'w-2/3' : 'w-full'} py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer`}
+                      >
+                        {editingProjectId ? 'ذخیره تغییرات پروژه' : 'ثبت و بارگذاری پروژه در سایت'}
+                      </button>
+                    </div>
                   </form>
 
                   {/* Portfolio Projects list within Admin */}
@@ -615,25 +666,41 @@ export default function AdminPanel({
                     <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-sm mb-4">آرشیو پروژه‌های قابل مدیریت:</h4>
                     <div className="space-y-2">
                       {projects.map((p) => (
-                        <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-xs">
-                          <div className="flex items-center gap-3">
-                            <span className="bg-blue-100 dark:bg-blue-950/65 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded text-[10px] font-bold">{p.client}</span>
-                            <span className="font-extrabold text-slate-800 dark:text-slate-200">{p.title}</span>
+                        <div key={p.id} className={`flex items-center justify-between p-3 rounded-xl text-xs ${
+                          editingProjectId === p.id 
+                            ? 'bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800' 
+                            : 'bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800'
+                        }`}>
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="bg-blue-100 dark:bg-blue-950/65 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded text-[10px] font-bold shrink-0">{p.client}</span>
+                            <span className="font-extrabold text-slate-800 dark:text-slate-200 truncate">{p.title}</span>
                           </div>
-                          <button
-                            onClick={() => {
-                              onDeleteProject(p.id);
-                              onAddSecurityLog({
-                                action: 'حذف پروژه',
-                                details: `مدیر پروژه "${p.title}" را از آرشیو خارج کرد`,
-                                status: 'warning'
-                              });
-                            }}
-                            className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
-                            title="حذف پروژه"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            {editingProjectId === p.id && (
+                              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold ml-1">در حال ویرایش</span>
+                            )}
+                            <button
+                              onClick={() => handleEditProject(p)}
+                              className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-lg transition-colors cursor-pointer"
+                              title="ویرایش پروژه"
+                            >
+                              <PenLine className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                onDeleteProject(p.id);
+                                onAddSecurityLog({
+                                  action: 'حذف پروژه',
+                                  details: `مدیر پروژه "${p.title}" را از آرشیو خارج کرد`,
+                                  status: 'warning'
+                                });
+                              }}
+                              className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+                              title="حذف پروژه"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>

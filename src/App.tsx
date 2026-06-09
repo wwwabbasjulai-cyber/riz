@@ -140,6 +140,11 @@ function AppContent() {
     setProjects(prev => prev.filter(p => p.id !== id));
   };
 
+  const handleUpdateProject = async (id: string, data: Partial<Project>) => {
+    const updated = await api.projects.update(id, data);
+    setProjects(prev => prev.map(p => p.id === id ? updated : p));
+  };
+
   const handleAddBlogPost = async (post: BlogPost) => {
     const created = await api.blog.create(post);
     setBlogPosts(prev => [created, ...prev]);
@@ -279,8 +284,9 @@ function AppContent() {
             <AdminPanel
               onClose={() => navigate('/')}
               projects={projects}
-              onAddProject={handleAddProject}
-              onDeleteProject={handleDeleteProject}
+               onAddProject={handleAddProject}
+               onUpdateProject={handleUpdateProject}
+               onDeleteProject={handleDeleteProject}
               blogPosts={blogPosts}
               onAddBlogPost={handleAddBlogPost}
               onDeleteBlogPost={handleDeleteBlogPost}
