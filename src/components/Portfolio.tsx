@@ -108,10 +108,7 @@ export default function Portfolio({ projects, onSelectProject }: PortfolioProps)
                     alt={project.title}
                     className="w-full h-full object-cover transform scale-100 group-hover:scale-101 transition-transform duration-300"
                   />
-                  {/* Subtle WebP optimization indicator */}
-                  <div className="absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur-md px-2 py-0.5 rounded-md text-[9px] font-mono text-white/90">
-                    {project.compressedSize || '120 KB'} WebP
-                  </div>
+                  
                 </div>
 
                 {/* Subtitle / Client & Date */}

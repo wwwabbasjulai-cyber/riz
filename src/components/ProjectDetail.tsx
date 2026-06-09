@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { Project } from '../types';
 import { 
   ArrowLeft, Calendar, User, Zap, Shield, Database, 
-  Github, ExternalLink, Sparkles, Send, Layout, HardDrive, Cpu, ArrowRight
+   Github, ExternalLink, Sparkles, Send, Layout, Cpu, ArrowRight
 } from 'lucide-react';
 
 interface ProjectDetailProps {
@@ -39,7 +39,6 @@ export default function ProjectDetail({
   // Helper mock analytics or indicators to match the premium "Tiny Engineering" brand
   const loadTime = "۰.۴ ثانیه";
   const carbonFootprint = "۹۸% صرفه‌جویی انرژی دیتابیس";
-  const bundleWeight = project.compressedSize || "۱۲۰ KB";
 
   return (
     <div className="py-24 bg-white dark:bg-slate-950 min-h-screen text-right" dir="rtl">
@@ -77,11 +76,7 @@ export default function ProjectDetail({
                 className="w-full h-full object-cover transform scale-100 group-hover:scale-101 transition-transform duration-500"
               />
               
-              {/* Badge indicating absolute sizing optimization */}
-              <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md text-white px-3.5 py-1.5 rounded-2xl text-[10px] font-mono font-semibold flex items-center gap-1.5 shadow-sm">
-                <HardDrive className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-                <span>بهینه‌سازی تصاویر: {project.originalSize || '2.5 MB'} ➜ {bundleWeight}</span>
-              </div>
+              
             </div>
           </div>
 
